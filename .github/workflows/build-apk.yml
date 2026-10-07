@@ -3,11 +3,14 @@ name: Build Android Debug APK
 on:
   push:
     branches: [ "main", "master" ]
-  workflow_dispatch: # Allows manual trigger from the web UI
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: VoiceNagReminders_Complete_Project
 
     steps:
       - name: Checkout Code
@@ -19,23 +22,21 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Grant Execute Permission to Gradle Wrapper
-        run: chmod +x gradlew || true
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Build Debug APK
         run: |
+          chmod +x gradlew || true
           if [ -f "./gradlew" ]; then
-            ./gradlew assembleDebug --stacktrace
+            ./gradlew assembleDebug --no-daemon --stacktrace
           else
-            gradle assembleDebug --stacktrace
+            gradle assembleDebug --no-daemon --stacktrace
           fi
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: voice-nag-reminder-apk
-          path: app/build/outputs/apk/debug/*.apk
+          name: VoiceNagReminders-APK
+          path: VoiceNagReminders_Complete_Project/app/build/outputs/apk/debug/*.apk
           retention-days: 7
