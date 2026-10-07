@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.VoiceNagReminders" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#3B82F6</item>
+        <item name="colorSecondary">#10B981</item>
+    </style>
+</resources>
